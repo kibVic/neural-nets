@@ -19,7 +19,7 @@ def prepare_data(input_size=150, batch_size=32):
 
     val_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
     val_ds = val_gen.flow_from_directory(
-        './validation_dataset',
+        './validation_datasetgi',
         target_size=(input_size, input_size),
         batch_size=batch_size,
         shuffle=False
