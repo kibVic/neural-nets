@@ -183,7 +183,7 @@ def main():
         print("Test Evaluation:", test_score)
 
         # Predict a single image
-        image_path = 'test_dataset/sorghum_flour/Soghurm _1742984621677.jpg'
+        image_path = 'test_dataset/contaminated_maize_flour/Contaminated _1742985210041.jpg'
         predictions = predict_image(model, image_path, input_size=299)
         if predictions is None:
             raise ValueError("Error in making predictions.")
