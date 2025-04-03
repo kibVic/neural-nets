@@ -12,14 +12,14 @@ def prepare_data(input_size=150, batch_size=32):
     """
     train_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
     train_ds = train_gen.flow_from_directory(
-        './clothing-dataset-small/train',
+        './train_dataset',
         target_size=(input_size, input_size),
         batch_size=batch_size
     )
 
     val_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
     val_ds = val_gen.flow_from_directory(
-        './clothing-dataset-small/validation',
+        './validation_dataset',
         target_size=(input_size, input_size),
         batch_size=batch_size,
         shuffle=False
