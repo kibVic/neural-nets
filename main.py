@@ -19,7 +19,7 @@ def prepare_data(input_size=150, batch_size=32):
 
     val_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
     val_ds = val_gen.flow_from_directory(
-        './validation_datasetgi',
+        './validation_dataset',
         target_size=(input_size, input_size),
         batch_size=batch_size,
         shuffle=False
@@ -82,8 +82,11 @@ def predict_image(model, image_path, input_size=299):
     pred = model.predict(img_array)
 
     classes = [
-        'dress', 'hat', 'longsleeve', 'outwear', 'pants', 
-        'shirt', 'shoes', 'shorts', 'skirt', 't-shirt'
+       "contaminated_maize_flour",
+       "maize_flour_grade_one",
+       "maize_flour_grade_two",
+       "sorghum_flour",
+       "yellow_flour"
     ]
     
     return dict(zip(classes, pred[0]))
@@ -129,7 +132,7 @@ def main():
     # Evaluate model on test data
     test_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
     test_ds = test_gen.flow_from_directory(
-        './clothing-dataset-small/test',
+        './test_dataset',
         target_size=(299, 299),
         batch_size=32,
         shuffle=False
@@ -138,7 +141,7 @@ def main():
     print("Test Evaluation:", test_score)
 
     # Predict a single image
-    image_path = 'clothing-dataset-small/test/pants/c8d21106-bbdb-4e8d-83e4-bf3d14e54c16.jpg'
+    image_path = 'test_dataset/sorghum_flour/Soghurm _1742984621677.jpg'
     predictions = predict_image(model, image_path, input_size=299)
     print("Predictions:", predictions)
 
