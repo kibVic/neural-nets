@@ -40,12 +40,17 @@ def create_model(input_size=150, learning_rate=0.001, size_inner=100, droprate=0
     vectors = keras.layers.GlobalAveragePooling2D()(base)
     inner = keras.layers.Dense(size_inner, activation='relu')(vectors)
     drop = keras.layers.Dropout(droprate)(inner)
-    outputs = keras.layers.Dense(10)(drop)
+
+    # outputs = keras.layers.Dense(10)(drop)
+    outputs = keras.layers.Dense(5, activation='softmax')(drop)
+
 
     model = keras.Model(inputs, outputs)
 
     optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
-    loss = keras.losses.CategoricalCrossentropy(from_logits=True)
+    # loss = keras.losses.CategoricalCrossentropy(from_logits=True)
+    loss = keras.losses.CategoricalCrossentropy()
+
 
     model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
 
@@ -121,10 +126,10 @@ def main():
     model = create_model(input_size=299, learning_rate=0.001, size_inner=100, droprate=0.2)
 
     # Train the model
-    history = train_model(model, train_ds, val_ds, epochs=50)
+    history = train_model(model, train_ds, val_ds, epochs=10)
 
     # Plot training history
-    plot_history(history, epochs=50)
+    plot_history(history, epochs=10)
 
     # Save the final model
     model.save('final_model.h5')
