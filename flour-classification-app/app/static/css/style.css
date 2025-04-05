@@ -399,29 +399,37 @@ button:active {
 }
 
 .prediction-card {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 100%; /* Ensure the card does not exceed the container width */
+    overflow: hidden; /* Hide anything that overflows the card */
+    text-align: center; /* Center the content if needed */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .prediction-image {
-    width: 100%;
-    max-width: 150px;
-    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
     margin-bottom: 10px;
 }
 
 .prediction-card h4 {
-    font-size: 18px;
-    color: #333;
+    text-overflow: ellipsis; /* Truncate text if it's too long */
+    overflow: hidden; /* Ensure text does not overflow */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+    font-size: 1.2em;
     margin-bottom: 10px;
 }
 
 .prediction-card p {
-    font-size: 14px;
-    color: #555;
+    margin: 5px 0;
 }
+
 
 .prediction-card strong {
     color: #4caf50;
