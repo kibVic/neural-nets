@@ -1,0 +1,190 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+nav {
+    background: linear-gradient(to right, #FFA500, #FF8C00); /* Gradient for navbar */
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background 0.3s ease;
+}
+
+nav:hover {
+    background: linear-gradient(to right, #FF8C00, #FF6A00); /* Darken gradient on hover */
+}
+
+.navbar-brand {
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #FF8C00; /* Change color on hover */
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-links .navbar-item {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.navbar-links .navbar-item:hover {
+    color: #FF6347; /* Hover effect */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.navbar-links .login-btn {
+    background-color: #FF8C00;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-links .login-btn:hover {
+    background-color: #FF6A00;
+    transform: scale(1.05); /* Zoom effect */
+}
+
+/* Flash Messages */
+.flash {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Container Styling */
+.container {
+    padding: 30px;
+}
+
+/* Login container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+}
+
+/* Login card style */
+.login-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    animation: slideIn 0.5s ease-out; /* Slide-in animation */
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: #FFA500;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.5); /* Focus glow */
+}
+
+/* Submit Button */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #FFA500;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #FF8C00;
+    transform: translateY(-2px); /* Button hover effect */
+}
+
+button:active {
+    transform: translateY(1px); /* Button click effect */
+}
+
+/* Flash message style */
+.flash {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        width: 100%;
+        margin-top: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links .navbar-item {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .navbar-links .login-btn {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+}

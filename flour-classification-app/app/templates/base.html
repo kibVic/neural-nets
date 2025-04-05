@@ -3,47 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Flour Classifier{% endblock %}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        nav {
-            background-color: #FFA500;
-            padding: 10px 20px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            margin-left: 15px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .container {
-            padding: 30px;
-        }
-        .flash {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
 <nav>
-    <div><a href="{{ url_for('main.dashboard') }}">Flour Classifier</a></div>
-    <div>
+    <div><a href="{{ url_for('main.dashboard') }}" class="navbar-brand">Flour Classifier</a></div>
+    <div class="navbar-links">
         {% if session.get('user') %}
-            Logged in as {{ session['user'] }} |
-            <a href="{{ url_for('main.upload') }}">Upload</a> |
-            <a href="{{ url_for('main.logout') }}">Logout</a>
+            <span class="navbar-text">Logged in as {{ session['user'] }}</span> |
+            <a href="{{ url_for('main.upload') }}" class="navbar-item">Upload</a> |
+            <a href="{{ url_for('main.logout') }}" class="navbar-item">Logout</a>
         {% else %}
-            <a href="{{ url_for('main.index') }}">Login</a>
+            <a href="{{ url_for('main.index') }}" class="login-btn">Login</a>
         {% endif %}
     </div>
 </nav>
