@@ -431,30 +431,36 @@ button:active {
     margin-top: 40px;
 }
 
+/* Button Styles */
 .action-buttons a {
+    display: inline-block;
     text-decoration: none;
-    padding: 15px 30px;
+    padding: 15px 40px;
     margin: 10px;
     font-size: 18px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
 }
 
 .btn-primary {
-    background-color: #4caf50;
+    background-color: #FFA500;  /* Orange */
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #45a049;
+    background-color: #ff8c00;  /* Darker Orange */
 }
 
 .btn-secondary {
-    background-color: #00bcd4;
+    background-color: #FFA500;  /* Spring Green */
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #0097a7;
+    background-color: #ff8c00;  /* Darker Spring Green */
 }
