@@ -35,10 +35,15 @@ def dashboard():
         return redirect(url_for('main.index'))
     return render_template('dashboard.html')
 
+
+#     return render_template('upload.html')
 @main.route('/upload', methods=['GET', 'POST'])
 def upload():
     if 'user' not in session:
         return redirect(url_for('main.index'))
+
+    prediction = None
+    prediction_flour = None
 
     if request.method == 'POST':
         file = request.files['image']
@@ -46,8 +51,17 @@ def upload():
             filename = secure_filename(file.filename)
             path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(path)
+
+            # Predict the image and extract prediction results
             prediction = predict_image(model, path)
-            flash(f"Prediction: {prediction}")
+
+            # Get the flour with the highest probability
+            predicted_flour = max(prediction, key=prediction.get)
+            prediction_flour = predicted_flour.replace('_', ' ').title()  # Format for better display
+
+            # Flash message (if needed for transient notifications)
+            flash(f"Prediction: {prediction_flour} with probability: {prediction[predicted_flour]:.4f}")
+            
             return redirect(url_for('main.upload'))
 
-    return render_template('upload.html')
+    return render_template('upload.html', prediction=prediction, prediction_flour=prediction_flour)

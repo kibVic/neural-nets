@@ -3,9 +3,27 @@
 {% block title %}Upload Image{% endblock %}
 
 {% block content %}
-<h2>Upload Image for Prediction</h2>
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="image" accept="image/*" required><br><br>
-    <button type="submit">Predict</button>
-</form>
+<div class="upload-container">
+    <div class="upload-card">
+        <h2>Upload Image for Prediction</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required><br><br>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</div>
+
+{% if prediction %}
+    <div class="prediction-container">
+        <div class="prediction-card">
+            <h2 class="prediction-title">Prediction Result</h2>
+            <p class="prediction-message">{{ prediction_flour }} has been predicted with the highest probability!</p>
+            <ul class="prediction-details">
+                {% for flour, prob in prediction.items() %}
+                    <li>{{ flour | replace('_', ' ') | title }}: {{ '{:.4f}'.format(prob) }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}
