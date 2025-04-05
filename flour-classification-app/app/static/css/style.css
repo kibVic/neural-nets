@@ -435,6 +435,22 @@ button:active {
     color: #4caf50;
 }
 
+.metric-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.5em;
+    color: #333;
+    font-weight: bold;
+}
+
 .action-buttons {
     margin-top: 40px;
 }
