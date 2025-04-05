@@ -3,6 +3,54 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ session['user'] }}!</h2>
-<p>This is your dashboard. From here, you can upload images and view predictions.</p>
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h2>Welcome, {{ session['user'] }}!</h2>
+        <p class="dashboard-subheading">Your personalized Flour Classifier Dashboard</p>
+    </div>
+
+    <!-- Key Metrics Section -->
+    <div class="key-metrics">
+        <div class="metric-card">
+            <h3>Images Uploaded</h3>
+            <p class="metric-value">{{ images_uploaded }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>Predictions Made</h3>
+            <p class="metric-value">{{ predictions_made }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>Last Prediction</h3>
+            <p class="metric-value">{{ last_prediction }}</p>
+        </div>
+    </div>
+
+    <!-- Recent Predictions Section -->
+    <div class="recent-predictions">
+        <h3>Recent Predictions</h3>
+        {% if recent_predictions %}
+        <ul class="prediction-list">
+            {% for prediction in recent_predictions %}
+            <li class="prediction-item">
+                <div class="prediction-card">
+                    <img src="{{ prediction.image_url }}" alt="{{ prediction.image_name }}" class="prediction-image">
+                    <h4>{{ prediction.image_name }}</h4>
+                    <p>Predicted Flour: <strong>{{ prediction.predicted_flour }}</strong></p>
+                    <p>Probability: <strong>{{ prediction.probability }}%</strong></p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No predictions yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Action Buttons Section -->
+    <div class="action-buttons">
+        <a href="{{ url_for('main.upload') }}" class="btn-primary">Upload Image</a>
+        <a href="{{ url_for('main.logout') }}" class="btn-secondary">Logout</a>
+    </div>
+</div>
 {% endblock %}
