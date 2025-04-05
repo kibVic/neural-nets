@@ -3,3 +3,7 @@ pandas
 numpy
 matplotlib
 flask
+flask_sqlalchemy
+flask_wtf
+flask_login
+psycopg2-binary

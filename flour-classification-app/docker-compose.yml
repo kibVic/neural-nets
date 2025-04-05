@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Flask app service
+  web:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://flask_user:flask_password@db:5432/flour_classification
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - flask_network
+    command: flask run --host=0.0.0.0  # Ensures Flask runs on 0.0.0.0 so it can be accessed from outside the container
+
+  # PostgreSQL service
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: flour_classification
+      POSTGRES_USER: flask_user
+      POSTGRES_PASSWORD: flask_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - flask_network
+
+networks:
+  flask_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
