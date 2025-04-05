@@ -1,10 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import numpy as np
 from tensorflow import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
 from tensorflow.keras.applications.xception import Xception, preprocess_input
-from urllib.parse import urlparse
+
 
 
 
