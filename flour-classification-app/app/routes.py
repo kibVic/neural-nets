@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash,jsonify
 import json, os
+import requests  # To communicate with the ESP32-CAM
 from werkzeug.utils import secure_filename
 from app.model_utils import load_model, predict_image
 
@@ -7,6 +8,9 @@ main = Blueprint('main', __name__)
 model = load_model()
 UPLOAD_FOLDER = 'app/static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ESP32-CAM IP address
+ESP32_CAM_URL = "http://<ESP32-CAM_IP>/capture"
 
 @main.route('/')
 def index():
@@ -65,3 +69,16 @@ def upload():
             return redirect(url_for('main.upload'))
 
     return render_template('upload.html', prediction=prediction, prediction_flour=prediction_flour)
+
+#capture images using esp32cam
+@main.route('/capture-image')
+def capture_image():
+    try:
+        # Send a request to ESP32-CAM to capture an image
+        response = requests.get(ESP32_CAM_URL)
+        if response.status_code == 200:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500

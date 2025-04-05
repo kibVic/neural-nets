@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Upload Image{% endblock %}
+{% block title %}Upload or Capture Image{% endblock %}
 
 {% block content %}
 <div class="upload-container">
     <div class="upload-card">
-        <h2>Upload Image for Prediction</h2>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="image" accept="image/*" required><br><br>
-            <button type="submit">Predict</button>
+        <h2>Upload or Capture Image for Prediction</h2>
+
+        <!-- Button to trigger ESP32-CAM capture -->
+        <button id="captureBtn" onclick="captureImage()" class="capture-btn">Capture Image from Camera</button><br><br>
+
+        <!-- Form for uploading an image -->
+        <form method="POST" enctype="multipart/form-data" id="uploadForm" class="upload-form">
+            <input type="file" name="image" accept="image/*" id="fileInput" required><br><br>
+            <button type="submit" class="upload-btn">Upload and Predict</button>
         </form>
     </div>
 </div>
@@ -26,4 +31,22 @@
         </div>
     </div>
 {% endif %}
+
+<script>
+    function captureImage() {
+        // Trigger the ESP32-CAM to capture an image
+        fetch('/capture-image')
+            .then(response => response.json())
+            .then(data => {
+                // If image capture is successful, automatically trigger the file upload
+                if (data.success) {
+                    alert("Image captured successfully!");
+                    // Trigger file input for automatic upload if needed
+                    document.getElementById('fileInput').click();
+                } else {
+                    alert("Failed to capture image.");
+                }
+            });
+    }
+</script>
 {% endblock %}
