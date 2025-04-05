@@ -6,7 +6,7 @@
 <div class="dashboard-container">
     <!-- Welcome Section -->
     <div class="welcome-section">
-        <h3>Welcome, {{ session['user'] }}!</h3>
+        <!-- <h3>Welcome, {{ session['user'] }}!</h3> -->
         <!-- <p class="dashboard-subheading">Your personalized Flour Classifier Dashboard</p> -->
     </div>
 
@@ -14,15 +14,15 @@
     <div class="key-metrics">
         <div class="metric-card">
             <h3>Images Uploaded</h3>
-            <p class="metric-value">{{ images_uploaded }}</p>
+            <p class="metric-value" id="images-uploaded">{{ images_uploaded }}</p>
         </div>
         <div class="metric-card">
             <h3>Predictions Made</h3>
-            <p class="metric-value">{{ predictions_made }}</p>
+            <p class="metric-value" id="predictions-made">{{ predictions_made }}</p>
         </div>
         <div class="metric-card">
             <h3>Last Prediction</h3>
-            <p class="metric-value">{{ last_prediction }}</p>
+            <p class="metric-value" id="last-prediction">{{ last_prediction }}</p>
         </div>
     </div>
 
@@ -30,14 +30,14 @@
     <div class="recent-predictions">
         <h3>Recent Predictions</h3>
         {% if recent_predictions %}
-        <ul class="prediction-list">
+        <ul class="prediction-list" id="prediction-list">
             {% for prediction in recent_predictions %}
             <li class="prediction-item">
                 <div class="prediction-card">
                     <img src="{{ prediction.image_url }}" alt="{{ prediction.image_name }}" class="prediction-image">
                     <h4>{{ prediction.image_name }}</h4>
                     <p>Predicted Flour: <strong>{{ prediction.predicted_flour }}</strong></p>
-                    <p>Probability: <strong>{{ prediction.probability }}%</strong></p>
+                    <!-- <p>Probability: <strong>{{ prediction.probability }}%</strong></p> -->
                 </div>
             </li>
             {% endfor %}
@@ -50,7 +50,74 @@
     <!-- Action Buttons Section -->
     <div class="action-buttons">
         <a href="{{ url_for('main.upload') }}" class="btn-primary">Upload Image</a>
+        <!-- <button class="btn-primary" id="capture-image-btn">Capture Image</button> -->
         <a href="{{ url_for('main.logout') }}" class="btn-secondary">Logout</a>
     </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+    // Fetch real-time dashboard data every 5 seconds
+    function fetchDashboardData() {
+        fetch("{{ url_for('main.get_dashboard_data') }}")
+            .then(response => response.json())
+            .then(data => {
+                // Update key metrics
+                document.getElementById('images-uploaded').innerText = data.images_uploaded;
+                document.getElementById('predictions-made').innerText = data.predictions_made;
+                document.getElementById('last-prediction').innerText = data.last_prediction;
+
+                // Update recent predictions
+                const predictionList = document.getElementById('prediction-list');
+                predictionList.innerHTML = "";  // Clear existing list
+
+                data.recent_predictions.forEach(prediction => {
+                    const predictionItem = document.createElement('li');
+                    predictionItem.classList.add('prediction-item');
+
+                    const predictionCard = document.createElement('div');
+                    predictionCard.classList.add('prediction-card');
+
+                    const predictionImage = document.createElement('img');
+                    predictionImage.src = prediction.image_url;
+                    predictionImage.alt = prediction.image_name;
+                    predictionImage.classList.add('prediction-image');
+
+                    const predictionName = document.createElement('h4');
+                    predictionName.innerText = prediction.image_name;
+
+                    const predictedFlour = document.createElement('p');
+                    predictedFlour.innerHTML = `Predicted Flour: <strong>${prediction.predicted_flour}</strong>`;
+
+                    const probability = document.createElement('p');
+                    probability.innerHTML = `Probability: <strong>${prediction.probability}%</strong>`;
+
+                    predictionCard.appendChild(predictionImage);
+                    predictionCard.appendChild(predictionName);
+                    predictionCard.appendChild(predictedFlour);
+                    predictionCard.appendChild(probability);
+
+                    predictionItem.appendChild(predictionCard);
+                    predictionList.appendChild(predictionItem);
+                });
+            });
+    }
+
+    // Capture image when button is clicked
+    document.getElementById('capture-image-btn').addEventListener('click', function () {
+        fetch("{{ url_for('main.capture_image') }}")
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Image captured successfully!");
+                    fetchDashboardData();  // Refresh dashboard after capturing image
+                } else {
+                    alert("Error capturing image.");
+                }
+            });
+    });
+
+    // Update dashboard data every 5 seconds
+    setInterval(fetchDashboardData, 5000);
+</script>
 {% endblock %}
