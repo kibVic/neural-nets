@@ -1,11 +1,6 @@
 import numpy as np
-import tensorflow as tf
-import gdown
-import zipfile
-import os
 import matplotlib.pyplot as plt
 import numpy as np
-import tempfile
 from tensorflow import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
 from tensorflow.keras.applications.xception import Xception, preprocess_input
