@@ -1,31 +1,17 @@
-# import numpy as np
+import numpy as np
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
-from tensorflow.keras.applications.xception import Xception, preprocess_input
 import gdown
 import zipfile
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import tempfile
+from tensorflow import keras
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
+from tensorflow.keras.applications.xception import Xception, preprocess_input
+from urllib.parse import urlparse
 
-# 1. Function to download datasets from Google Drive
-def download_data_from_google_drive(gdrive_link, output_path):
-    """
-    Downloads the dataset from Google Drive and extracts the contents.
-    """
-    try:
-        # Create a temporary file to store the dataset
-        gdown.download(gdrive_link, output_path, quiet=False)
-        print(f"Downloaded dataset to {output_path}")
-        
-        # Extract the zip file
-        with zipfile.ZipFile(output_path, 'r') as zip_ref:
-            zip_ref.extractall(os.path.dirname(output_path))
-        print(f"Extracted dataset to {os.path.dirname(output_path)}")
-        
-    except Exception as e:
-        print(f"Error while downloading and extracting dataset: {e}")
+
 
 # 2. Function to load and prepare datasets
 def prepare_data(input_size=150, batch_size=32):
@@ -173,11 +159,7 @@ def train_model(model, train_ds, val_ds, epochs=10, checkpoint_filepath='model_c
 # 8. Main Execution Flow
 def main():
     try:
-        # Step 1: Download and extract datasets
-        download_data_from_google_drive('https://drive.google.com/uc?id=1oR76-YIbEZJiBk58qmJaWPBTMNUIxi-W', 'train_dataset.zip')
-        download_data_from_google_drive('https://drive.google.com/uc?id=1KbuKGmKAGZPahKUKLcFu86ThrI9_ms49', 'validation_dataset.zip')
-        download_data_from_google_drive('https://drive.google.com/uc?id=1Mxp0vjXP1iqGd2zUhmdopvKkgA5BBKLg', 'test_dataset.zip')
-
+       
         # Step 2: Load data
         train_ds, val_ds, test_ds = prepare_data(input_size=299, batch_size=32)
         if train_ds is None or val_ds is None or test_ds is None:
@@ -206,8 +188,10 @@ def main():
 
         print("Test Evaluation:", test_score)
 
+       
         # Step 8: Predict a single image
-        image_path = './test_dataset/contaminated_maize_flour/Contaminated_1742985210041.jpg'
+        image_path = "test_dataset/contaminated_maize_flour/Contaminated _1742985210041.jpg"
+
         predictions = predict_image(model, image_path, input_size=299)
         if predictions is None:
             raise ValueError("Error in making predictions.")
