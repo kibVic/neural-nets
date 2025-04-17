@@ -50,7 +50,7 @@
     <!-- Action Buttons Section -->
     <div class="action-buttons">
         <a href="{{ url_for('main.upload') }}" class="btn-primary">Upload Image</a>
-        <!-- <button class="btn-primary" id="capture-image-btn">Capture Image</button> -->
+        <button class="btn-primary" id="capture-image-btn">Capture Image</button>
         <a href="{{ url_for('main.logout') }}" class="btn-secondary">Logout</a>
     </div>
 </div>
@@ -105,7 +105,7 @@
 
     // Capture image when button is clicked
     document.getElementById('capture-image-btn').addEventListener('click', function () {
-        fetch("{{ url_for('main.capture_image') }}")
+        fetch("{{ url_for('main.capture_images') }}")
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

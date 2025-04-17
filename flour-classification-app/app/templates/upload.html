@@ -19,34 +19,23 @@
 </div>
 
 {% if prediction %}
-    <div class="prediction-container">
-        <div class="prediction-card">
-            <h2 class="prediction-title">Prediction Result</h2>
-            <p class="prediction-message">{{ prediction_flour }} has been predicted with the highest probability!</p>
-            <ul class="prediction-details">
-                {% for flour, prob in prediction.items() %}
-                    <li>{{ flour | replace('_', ' ') | title }}: {{ '{:.4f}'.format(prob) }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+<div class="prediction-container">
+    <div class="prediction-card">
+        <h2 class="prediction-title">Prediction Result</h2>
+        <p class="prediction-message">{{ prediction_flour }} has been predicted with the highest probability!</p>
+        <ul class="prediction-details">
+            {% for flour, prob in prediction.items() %}
+            <li>{{ flour | replace('_', ' ') | title }}: {{ '{:.4f}'.format(prob) }}</li>
+            {% endfor %}
+        </ul>
     </div>
+</div>
 {% endif %}
 
 <script>
     function captureImage() {
-        // Trigger the ESP32-CAM to capture an image
-        fetch('/capture-image')
-            .then(response => response.json())
-            .then(data => {
-                // If image capture is successful, automatically trigger the file upload
-                if (data.success) {
-                    alert("Image captured successfully!");
-                    // Trigger file input for automatic upload if needed
-                    document.getElementById('fileInput').click();
-                } else {
-                    alert("Failed to capture image.");
-                }
-            });
+        // Redirect to the ESP32-CAM URL (replace with your actual IP)
+        window.location.href = "http://192.168.0.103";
     }
 </script>
 {% endblock %}
