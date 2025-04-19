@@ -173,7 +173,3 @@ def get_dashboard_data():
     )
 
 
-# @main.route("/capture_image")
-# def capture_images():
-#     url = url
-#     return render_template_string(url=url)
