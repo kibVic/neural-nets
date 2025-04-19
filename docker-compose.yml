@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: mydb
+      POSTGRES_DB: flour
     ports:
       - "5432:5432"
     volumes:
@@ -12,22 +12,25 @@ services:
     networks:
       - pgnetwork
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container
+  sqlpad:
+    image: sqlpad/sqlpad:latest
+    container_name: sqlpad_container
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      SQLPAD_ADMIN: admin@admin.com
+      SQLPAD_ADMIN_PASSWORD: admin
+      SQLPAD_DB_PATH: /var/lib/sqlpad
     ports:
-      - "8080:80"
+      - "3000:3000"
     depends_on:
       - db
+    volumes:
+      - sqlpad_data:/var/lib/sqlpad
     networks:
       - pgnetwork
 
 volumes:
   postgres_data:
-
+  sqlpad_data:
 
 networks:
   pgnetwork:

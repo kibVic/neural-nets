@@ -102,21 +102,6 @@
                 });
             });
     }
-
-    // Capture image when button is clicked
-    document.getElementById('capture-image-btn').addEventListener('click', function () {
-        fetch("{{ url_for('main.capture_images') }}")
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Image captured successfully!");
-                    fetchDashboardData();  // Refresh dashboard after capturing image
-                } else {
-                    alert("Error capturing image.");
-                }
-            });
-    });
-
     // Update dashboard data every 5 seconds
     setInterval(fetchDashboardData, 5000);
 </script>

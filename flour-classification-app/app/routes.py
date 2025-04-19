@@ -7,18 +7,44 @@ from flask import (
     session,
     flash,
     jsonify,
-    render_template_string,
 )
 import json, os
 from werkzeug.utils import secure_filename
 from app.model_utils import load_model, predict_image
+
+# SQLAlchemy imports
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
+from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime
 
 main = Blueprint("main", __name__)
 model = load_model()
 UPLOAD_FOLDER = "app/static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+DATABASE_URL = "postgresql://root:root@localhost:5432/postgres"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
+Base = declarative_base()
 
+
+class Prediction(Base):
+    __tablename__ = "predictions"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, nullable=False)
+    image_name = Column(String, nullable=False)
+    predicted_flour = Column(String, nullable=False)
+    probability = Column(Float, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+
+# Create table once
+Base.metadata.create_all(bind=engine)
+
+
+# =========================
+# ROUTES SECTION
+# =========================
 @main.route("/")
 def index():
     return render_template("login.html")
@@ -32,7 +58,6 @@ def login():
         users = json.load(f)
     if username in users and users[username] == password:
         session["user"] = username
-        # Initialize session data for the dashboard if it's a new session
         if "images_uploaded" not in session:
             session["images_uploaded"] = 0
             session["predictions_made"] = 0
@@ -53,7 +78,6 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("main.index"))
 
-    # Fetch current session data for display
     images_uploaded = session.get("images_uploaded", 0)
     predictions_made = session.get("predictions_made", 0)
     recent_predictions = session.get("recent_predictions", [])
@@ -85,47 +109,46 @@ def upload():
             path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(path)
 
-            # Predict the image and extract prediction results
             prediction = predict_image(model, path)
-
-            # Get the flour with the highest probability
             predicted_flour = max(prediction, key=prediction.get)
-            prediction_flour = predicted_flour.replace(
-                "_", " "
-            ).title()  # Format for better display
+            prediction_flour = predicted_flour.replace("_", " ").title()
 
-            # Update session data
-            images_uploaded = session.get("images_uploaded", 0) + 1
-            predictions_made = session.get("predictions_made", 0) + 1
+            # Session update
+            session["images_uploaded"] = session.get("images_uploaded", 0) + 1
+            session["predictions_made"] = session.get("predictions_made", 0) + 1
             recent_predictions = session.get("recent_predictions", [])
 
             image_info = {
                 "image_url": url_for("static", filename=f"uploads/{filename}"),
                 "image_name": filename,
                 "predicted_flour": predicted_flour,
-                "probability": "{:.2f}".format(
-                    prediction[predicted_flour] * 100
-                ),  # Show probability in percentage
+                "probability": "{:.2f}".format(prediction[predicted_flour] * 100),
             }
 
-            # Add the new prediction to the list (limit to 5 most recent)
             recent_predictions.insert(0, image_info)
             if len(recent_predictions) > 5:
                 recent_predictions = recent_predictions[:5]
 
-            # Save updated session data
-            session["images_uploaded"] = images_uploaded
-            session["predictions_made"] = predictions_made
             session["recent_predictions"] = recent_predictions
+            session["last_prediction"] = predicted_flour
 
-            # Flash message (if needed for transient notifications)
+            # Insert into PostgreSQL DB
+            db = SessionLocal()
+            try:
+                new_prediction = Prediction(
+                    username=session["user"],
+                    image_name=filename,
+                    predicted_flour=predicted_flour,
+                    probability=round(prediction[predicted_flour] * 100, 2),
+                )
+                db.add(new_prediction)
+                db.commit()
+            finally:
+                db.close()
+
             flash(
                 f"Prediction: {predicted_flour} with probability: {prediction[predicted_flour]:.4f}"
             )
-
-            # Update the last prediction in session
-            session["last_prediction"] = predicted_flour
-
             return redirect(url_for("main.upload"))
 
     return render_template(
@@ -133,15 +156,12 @@ def upload():
     )
 
 
-# Route for real-time dashboard data
 @main.route("/get_dashboard_data")
 def get_dashboard_data():
     images_uploaded = session.get("images_uploaded", 0)
     predictions_made = session.get("predictions_made", 0)
     recent_predictions = session.get("recent_predictions", [])
-    last_prediction = session.get(
-        "last_prediction", "N/A"
-    )  # Use 'last_prediction' from session
+    last_prediction = session.get("last_prediction", "N/A")
 
     return jsonify(
         {
@@ -153,8 +173,7 @@ def get_dashboard_data():
     )
 
 
-# # route to get to the external edge impulse page
-@main.route("/capture_image")
-def capture_images():
-    url = url
-    return render_template_string(url=url)
+# @main.route("/capture_image")
+# def capture_images():
+#     url = url
+#     return render_template_string(url=url)
