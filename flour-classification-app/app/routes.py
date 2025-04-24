@@ -22,7 +22,7 @@ model = load_model()
 UPLOAD_FOLDER = "app/static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-DATABASE_URL = "postgresql://root:root@localhost:5432/postgres"
+DATABASE_URL = "postgresql://root:root@172.18.0.2:5432/postgres"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
