@@ -35,10 +35,10 @@ After getting to the flour-classification-app,navigate to the routes.py and repl
 ```bash
 python run.py
 ```
-Follow the port fowarded and open in the browser
+Follow the port fowarded and open in to the browser
 
 ***Login in to the application***
 
-login with username and password ,they are all in the users.json
+Login with username and password ,they are all in the users.json
 
 Voila,go ahead to use the application
