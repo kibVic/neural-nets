@@ -1,4 +1,5 @@
 ***How to navigate through the application***
+
 1.Open the GitHub repository.
 
 2.Click on "Code" and select "Open with Codespaces".
