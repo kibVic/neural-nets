@@ -35,7 +35,7 @@ After getting to the flour-classification-app,navigate to the routes.py and repl
 ```bash
 python run.py
 ```
-Follow the port fowarded and open in to the browser
+Follow the port fowarded 5000, for this case and open in to the browser
 
 ***Login in to the application***
 
