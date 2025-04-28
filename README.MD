@@ -30,6 +30,9 @@ cd flour-classification-app
 ```
 
 After getting to the flour-classification-app,navigate to the routes.py and replace the DATABASE_URI host with the ip address you copied above.
+```bash
+DATABASE_URL = "postgresql://root:root@host:5432/postgres"
+```
 
 ***Run the application***
 ```bash
