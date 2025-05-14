@@ -17,31 +17,3 @@ docker compose up -d
 ```bash
 docker ps
 ```
-Copy the id of postgres container
-
-***Check the ip of postgres***
-```bash
-docker inspect id
-```
-
-***Navigate to the flour-classification-app***
-```bash
-cd flour-classification-app
-```
-
-After getting to the flour-classification-app,navigate to the routes.py and replace the DATABASE_URI host with the ip address you copied above.
-```bash
-DATABASE_URL = "postgresql://root:root@host:5432/postgres"
-```
-
-***Run the application***
-```bash
-python run.py
-```
-Follow the port fowarded 5000, for this case and open in to the browser
-
-***Login in to the application***
-
-Login with username and password ,they are all in the users.json
-
-Voila,go ahead to use the application

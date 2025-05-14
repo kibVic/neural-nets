@@ -1,37 +1,54 @@
-services:
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: flour
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - pgnetwork
+# services:
+#   db:
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_USER: root
+#       POSTGRES_PASSWORD: root
+#       POSTGRES_DB: flour
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     networks:
+#       - pgnetwork
 
-  sqlpad:
-    image: sqlpad/sqlpad:latest
-    container_name: sqlpad_container
-    environment:
-      SQLPAD_ADMIN: admin@admin.com
-      SQLPAD_ADMIN_PASSWORD: admin
-      SQLPAD_DB_PATH: /var/lib/sqlpad
+#   sqlpad:
+#     image: sqlpad/sqlpad:latest
+#     container_name: sqlpad_container
+#     environment:
+#       SQLPAD_ADMIN: admin@admin.com
+#       SQLPAD_ADMIN_PASSWORD: admin
+#       SQLPAD_DB_PATH: /var/lib/sqlpad
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - db
+#     volumes:
+#       - sqlpad_data:/var/lib/sqlpad
+#     networks:
+#       - pgnetwork
+
+# volumes:
+#   postgres_data:
+#   sqlpad_data:
+
+# networks:
+#   pgnetwork:
+#     driver: bridge
+version: '3.1'
+
+services:
+  couchdb:
+    image: couchdb:latest
+    container_name: couchdb
+    restart: always
     ports:
-      - "3000:3000"
-    depends_on:
-      - db
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin123
     volumes:
-      - sqlpad_data:/var/lib/sqlpad
-    networks:
-      - pgnetwork
+      - couchdb_data:/opt/couchdb/data
 
 volumes:
-  postgres_data:
-  sqlpad_data:
-
-networks:
-  pgnetwork:
-    driver: bridge
+  couchdb_data:
