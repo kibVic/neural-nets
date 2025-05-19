@@ -3,6 +3,30 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<style>
+  /* Alert popup styles */
+  #custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745; /* green */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in-out;
+    z-index: 1000;
+  }
+  #custom-alert.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
 <div class="dashboard-container">
     <!-- Welcome Section -->
     <div class="welcome-section">
@@ -55,9 +79,24 @@
     </div>
 </div>
 
+<!-- Custom alert popup div -->
+<div id="custom-alert"></div>
+
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 <script>
-    // Fetch real-time dashboard data every 5 seconds
+    // Store last prediction shown to avoid duplicate alerts
+    let lastAlertPrediction = "{{ last_prediction }}";
+
+    function showCustomAlert(message) {
+        const alertBox = document.getElementById('custom-alert');
+        alertBox.innerText = message;
+        alertBox.classList.add('show');
+        // Hide alert after 4 seconds
+        setTimeout(() => {
+            alertBox.classList.remove('show');
+        }, 4000);
+    }
+
     function fetchDashboardData() {
         fetch("{{ url_for('main.get_dashboard_data') }}")
             .then(response => response.json())
@@ -66,6 +105,12 @@
                 document.getElementById('images-uploaded').innerText = data.images_uploaded;
                 document.getElementById('predictions-made').innerText = data.predictions_made;
                 document.getElementById('last-prediction').innerText = data.last_prediction;
+
+                // Show alert if new prediction differs from last alert
+                if (data.last_prediction !== lastAlertPrediction && data.last_prediction !== "N/A") {
+                    showCustomAlert(`New Prediction Made: ${data.last_prediction}`);
+                    lastAlertPrediction = data.last_prediction;
+                }
 
                 // Update recent predictions
                 const predictionList = document.getElementById('prediction-list');
@@ -102,6 +147,10 @@
                 });
             });
     }
+
+    // Initial call on page load
+    fetchDashboardData();
+
     // Update dashboard data every 5 seconds
     setInterval(fetchDashboardData, 5000);
 </script>

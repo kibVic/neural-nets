@@ -32,10 +32,59 @@
 </div>
 {% endif %}
 
+<!-- Custom alert popup div -->
+<div id="custom-alert"></div>
+
+<style>
+  /* Custom alert styles */
+  #custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff9800; /* Orange alert */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 9999;
+    max-width: 320px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  #custom-alert.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
 <script>
     function captureImage() {
         // Redirect to the ESP32-CAM URL (replace with your actual IP)
         window.location.href = "http://192.168.0.103";
     }
+
+    function showCustomAlert(message) {
+        const alertBox = document.getElementById('custom-alert');
+        alertBox.innerText = message;
+        alertBox.classList.add('show');
+
+        // Hide alert after 4 seconds
+        setTimeout(() => {
+            alertBox.classList.remove('show');
+        }, 4000);
+    }
+
+    // If there's a prediction, show alert on page load
+    {% if prediction %}
+        const message = "{{ prediction_flour }} has been predicted with the highest probability!";
+        window.addEventListener('DOMContentLoaded', () => {
+            showCustomAlert(message);
+        });
+    {% endif %}
 </script>
+
 {% endblock %}
